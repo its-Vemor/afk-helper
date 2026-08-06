@@ -30,7 +30,11 @@ class AccountServiceTest {
     fun `registers a new account successfully`() {
         Mockito.doReturn(null).`when`(accountRepository).findByUid("123")
         Mockito.doReturn("new-token").`when`(lilithClient).verifyCode("123", "auth")
-        Mockito.doAnswer { it.getArgument<Account>(0).copy(id = 2L) }.`when`(accountRepository).save(Mockito.any(Account::class.java))
+        Mockito
+            .doAnswer {
+                it.getArgument<Account>(0).copy(id = 2L)
+            }.`when`(accountRepository)
+            .save(Mockito.any(Account::class.java))
 
         val result = service.ensureAccount("123", "auth")
 
@@ -41,9 +45,10 @@ class AccountServiceTest {
 
     @Test
     fun `blank uid throws InvalidCodeException`() {
-        val ex = assertFailsWith<InvalidCodeException> {
-            service.ensureAccount("   ", "auth")
-        }
+        val ex =
+            assertFailsWith<InvalidCodeException> {
+                service.ensureAccount("   ", "auth")
+            }
         assertEquals("uid must not be blank", ex.message)
     }
 
@@ -51,9 +56,10 @@ class AccountServiceTest {
     fun `blank authCode throws InvalidCodeException when account not registered`() {
         Mockito.doReturn(null).`when`(accountRepository).findByUid("123")
 
-        val ex = assertFailsWith<InvalidCodeException> {
-            service.ensureAccount("123", "   ")
-        }
+        val ex =
+            assertFailsWith<InvalidCodeException> {
+                service.ensureAccount("123", "   ")
+            }
         assertEquals("Auth code is required when the account is not registered yet", ex.message)
     }
 
@@ -61,9 +67,10 @@ class AccountServiceTest {
     fun `null authCode throws InvalidCodeException when account not registered`() {
         Mockito.doReturn(null).`when`(accountRepository).findByUid("123")
 
-        val ex = assertFailsWith<InvalidCodeException> {
-            service.ensureAccount("123", null)
-        }
+        val ex =
+            assertFailsWith<InvalidCodeException> {
+                service.ensureAccount("123", null)
+            }
         assertEquals("Auth code is required when the account is not registered yet", ex.message)
     }
 
@@ -71,7 +78,11 @@ class AccountServiceTest {
     fun `recovers from duplicate key if another thread registers account concurrently`() {
         Mockito.doReturn(null).`when`(accountRepository).findByUid("123")
         Mockito.doReturn("new-token").`when`(lilithClient).verifyCode("123", "auth")
-        Mockito.doThrow(DataIntegrityViolationException("duplicate key")).`when`(accountRepository).save(Mockito.any(Account::class.java))
+        Mockito
+            .doThrow(
+                DataIntegrityViolationException("duplicate key"),
+            ).`when`(accountRepository)
+            .save(Mockito.any(Account::class.java))
 
         val concurrentAccount = Account(id = 3L, uid = "123", authToken = "concurrent-token")
         // on the second findByUid call, return the concurrently created account
@@ -87,7 +98,11 @@ class AccountServiceTest {
     fun `rethrows DataIntegrityViolationException if account is still not found after duplicate key error`() {
         Mockito.doReturn(null).`when`(accountRepository).findByUid("123")
         Mockito.doReturn("new-token").`when`(lilithClient).verifyCode("123", "auth")
-        Mockito.doThrow(DataIntegrityViolationException("some other integrity violation")).`when`(accountRepository).save(Mockito.any(Account::class.java))
+        Mockito
+            .doThrow(
+                DataIntegrityViolationException("some other integrity violation"),
+            ).`when`(accountRepository)
+            .save(Mockito.any(Account::class.java))
 
         // second call also returns null
         Mockito.doReturn(null, null).`when`(accountRepository).findByUid("123")

@@ -12,7 +12,6 @@ import ru.vemor.afkhelper.service.ErrorResponseMapper
 import kotlin.test.assertEquals
 
 class ApiExceptionHandlerTest {
-
     private val apiLogger = Mockito.mock(ApiLogger::class.java)
     private val errorResponseMapper = Mockito.mock(ErrorResponseMapper::class.java)
     private val handler = ApiExceptionHandler(apiLogger, errorResponseMapper)
