@@ -20,8 +20,12 @@ class TelegramMessageHandlerTest {
     private val redemptionCodeService: RedemptionCodeService = Mockito.mock(RedemptionCodeService::class.java)
     private val codeActivationService: CodeActivationService = Mockito.mock(CodeActivationService::class.java)
     private val apiLogger = ApiLogger(AppLoggingProperties(enabled = false))
+    private val errorResponseMapper = ErrorResponseMapper()
+    private val addCommand = AddCommand(redemptionCodeService, apiLogger, errorResponseMapper)
+    private val activateCommand = ActivateCommand(codeActivationService, apiLogger, errorResponseMapper)
+    private val helpCommand = HelpCommand()
     private val handler =
-        TelegramMessageHandler(redemptionCodeService, codeActivationService, apiLogger, ErrorResponseMapper())
+        TelegramMessageHandler(listOf(addCommand, activateCommand, helpCommand), apiLogger)
 
     // ---------- /add ----------
 
