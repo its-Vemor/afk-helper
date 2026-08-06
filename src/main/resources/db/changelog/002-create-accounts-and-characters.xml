@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+	<changeSet id="002-create-accounts-and-characters" author="vemor">
+		<createTable tableName="accounts">
+			<column name="id" type="BIGINT" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false"/>
+			</column>
+			<column name="uid" type="VARCHAR(64)">
+				<constraints nullable="false" unique="true"/>
+			</column>
+			<column name="auth_token" type="VARCHAR(2048)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+		<createTable tableName="characters">
+			<column name="id" type="BIGINT" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false"/>
+			</column>
+			<column name="account_id" type="BIGINT">
+				<constraints nullable="false"/>
+			</column>
+			<column name="uid" type="BIGINT">
+				<constraints nullable="false" unique="true"/>
+			</column>
+			<column name="name" type="VARCHAR(255)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="svr_id" type="INT">
+				<constraints nullable="false"/>
+			</column>
+			<column name="level" type="INT">
+				<constraints nullable="false"/>
+			</column>
+			<column name="is_main" type="BOOLEAN" defaultValueBoolean="false">
+				<constraints nullable="false"/>
+			</column>
+			<column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+		<addForeignKeyConstraint
+			baseTableName="characters"
+			baseColumnNames="account_id"
+			constraintName="fk_characters_account"
+			referencedTableName="accounts"
+			referencedColumnNames="id"/>
+	</changeSet>
+</databaseChangeLog>

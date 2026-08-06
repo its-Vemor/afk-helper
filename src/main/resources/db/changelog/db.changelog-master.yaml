@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: classpath:/db/changelog/001-create-redemption-codes.xml
+  - include:
+      file: classpath:/db/changelog/002-create-accounts-and-characters.xml
+  - include:
+      file: classpath:/db/changelog/003-add-characters-account-index.xml

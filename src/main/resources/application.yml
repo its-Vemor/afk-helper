@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: afkhelper
+  datasource:
+    url: jdbc:postgresql://localhost:5432/afk_helper
+    username: ${DB_USERNAME:afk}
+    password: ${DB_PASSWORD:afk}
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.yaml
+
+lilith:
+  base-url: https://cdkey.lilith.com
+  app-id: "6241329"
+  game: afkgroup
+  gm-env-id: dglobal
+  pup-body: lilith
+
+app:
+  logging:
+    # Подробное логирование вызовов и ответов (REST, Telegram, Lilith).
+    # Ошибки логируются всегда; вызовы/ответы — только при enabled: true.
+    enabled: true
+
+telegram:
+  bot:
+    token: ${TELEGRAM_BOT_TOKEN:}
+    enabled: true
