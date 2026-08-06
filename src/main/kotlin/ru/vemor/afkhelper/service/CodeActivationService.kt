@@ -26,11 +26,9 @@ class CodeActivationService(
 ) {
     private val log = LoggerFactory.getLogger(CodeActivationService::class.java)
 
-    @Transactional
     fun activate(request: ActivateCodeRequest): CodeActivationResponse =
         doActivate(request.uid, request.redemptionCode, request.authCode)
 
-    @Transactional
     fun activate(
         accountUid: String,
         redemptionCode: String,

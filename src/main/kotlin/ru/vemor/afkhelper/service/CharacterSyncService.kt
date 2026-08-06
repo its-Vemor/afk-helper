@@ -1,6 +1,7 @@
 package ru.vemor.afkhelper.service
 
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import ru.vemor.afkhelper.client.RoleInfo
 import ru.vemor.afkhelper.domain.GameCharacter
 import ru.vemor.afkhelper.repository.GameCharacterRepository
@@ -12,6 +13,7 @@ import ru.vemor.afkhelper.repository.GameCharacterRepository
 class CharacterSyncService(
     private val characterRepository: GameCharacterRepository,
 ) {
+    @Transactional
     fun syncCharacters(
         accountId: Long,
         roles: List<RoleInfo>,
